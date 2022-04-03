@@ -1,13 +1,19 @@
 ## Indexing
-Base.getindex(x::CasadiSymbolicObject,j) = x.__pyobject__.__getitem__(j.-1)
+function Base.getindex(x::CasadiSymbolicObject,j::Union{Int, UnitRange{Int}, Colon}) 
+	x.__pyobject__.__getitem__(j.-1)
+end
 
-Base.getindex(x::CasadiSymbolicObject,j1, j2) = x.__pyobject__.__getitem__((j1.-1, j2.-1))
+function Base.getindex(x::CasadiSymbolicObject,
+					   j1::Union{Int, UnitRange{Int}, Colon}, 
+					   j2::Union{Int, UnitRange{Int}, Colon}) 
+	x.__pyobject__.__getitem__((j1.-1, j2.-1))
+end
 
-Base.setindex!(
-  x::CasadiSymbolicObject,
-  v::Number,
-  j::Union{Int, UnitRange{Int}, Colon}
-) = set!(x.__pyobject__, ( 1:length(x) )[if (j isa Int) j:j else j end] .- 1, v)
+function Base.setindex!(x::CasadiSymbolicObject,
+						v::Number,
+  						j::Union{Int, UnitRange{Int}, Colon})
+	x.__pyobject__.__setitem__(j .- 1, v)
+end
 
 function Base.setindex!(
   x::CasadiSymbolicObject,
@@ -15,10 +21,10 @@ function Base.setindex!(
   j1::Union{Int, UnitRange{Int}, Colon},
   j2::Union{Int, UnitRange{Int}, Colon}
 )
-    J1 = if (j1 isa Int) j1:j1 else j1 end
-    J2 = if (j2 isa Int) j2:j2 else j2 end
+    # J1 = if (j1 isa Int) j1:j1 else j1 end
+    # J2 = if (j2 isa Int) j2:j2 else j2 end
 
-    set!(x.__pyobject__, LinearIndices( size(x) )[J1,J2] .- 1, v)
+    x.__pyobject__.__setitem__( (j1 .- 1,j2 .- 1), v)
 end
 
 Base.lastindex(x::CasadiSymbolicObject) = length(x)
@@ -75,5 +81,7 @@ Base.Vector(V::CasadiSymbolicObject) = casadi.vertsplit(V)
 # Convert SX/MX to matrix
 Base.Matrix(M::CasadiSymbolicObject) = casadi.blocksplit(M)
 
-## Solve linear systems
-Base.:\(A::Matrix{C}, b::Vector{C}) where C <: CasadiSymbolicObject = Vector(casadi.solve(C(A), C(b)))
+
+Base.size(x::CasadiSymbolicObject) = x.size()
+Base.reshape(x::T, t::Tuple{Int, Int}) where T <: CasadiSymbolicObject = x.reshape(t)
+

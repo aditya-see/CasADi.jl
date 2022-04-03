@@ -14,6 +14,7 @@ export casadi, to_julia, substitute
 include("types.jl")
 include("constructors.jl")
 include("numbers.jl")
+include("mathops.jl")
 include("mathfuns.jl")
 include("generic.jl")
 include("utils.jl")

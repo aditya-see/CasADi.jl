@@ -1,28 +1,54 @@
-C = Union{CasadiSymbolicObject, Vector{<:Real}}
+V = Vector{<:Real}
 ## Unary operations
--(x::C)  = casadi.minus(0, x)
+-(x::C) where C <: CasadiSymbolicObject = pycall(casadi.minus, C, 0, x)
 
-## Binary operation
-+(x::C, y::C) = casadi.plus(x, y)
--(x::C, y::C) = casadi.minus(x, y)
-/(x::C, y::C) = casadi.rdivide(x, y)
-^(x::C, y::C) = casadi.power(x, y)
-\(x::C, y::C) = casadi.solve(x, y)
+## Binary operations
++(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.plus, C, x, y)
++(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.plus, C, x, y)
++(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.plus, C, x, y)
 
-function *(x::C, y::C)     
-	if size(x,2) == size(y,1)
-        casadi.mtimes(x, y)
-    else 
-        casadi.times(x, y)
-    end
-end
+-(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.minus, C, x, y)
+-(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.minus, C, x, y)
+-(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.minus, C, x, y)
+
+/(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.rdivide, C, x, y)
+/(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.rdivide, C, x, y)
+/(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.rdivide, C, x, y)
+
+*(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.times, C, x, y)
+*(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.times, C, x, y)
+*(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.times, C, x, y)
+
+^(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.power, C, x, y)
+^(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.power, C, x, y)
+^(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.power, C, x, y)
+
 
 ## Comparisons
->=(x::C, y::C) = casadi.ge(x, y)
->(x::C, y::C)  = casadi.gt(x, y)
-<=(x::C, y::C) = casadi.le(x, y)
-<(x::C, y::C)  = casadi.lt(x, y)
-==(x::C, y::C) = casadi.eq(x, y)
+>=(x::C, y::Real) where C <: CasadiSymbolicObject = pycall(casadi.ge, C, x, y)
+>=(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.ge, C, x, y)
+>=(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.ge, C, x, y)
+>=(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.ge, C, x, y)
+
+>(x::C, y::Real)  where C <: CasadiSymbolicObject = pycall(casadi.gt, C, x, y)
+>(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.gt, C, x, y)
+>(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.gt, C, x, y)
+>(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.gt, C, x, y)
+
+<=(x::C, y::Real) where C <: CasadiSymbolicObject = pycall(casadi.le, C, x, y)
+<=(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.le, C, x, y)
+<=(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.le, C, x, y)
+<=(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.le, C, x, y)
+
+<(x::C, y::Real)  where C <: CasadiSymbolicObject = pycall(casadi.lt, C, x, y)
+<(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.lt, C, x, y)
+<(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.lt, C, x, y)
+<(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.lt, C, x, y)
+
+==(x::C, y::Real) where C <: CasadiSymbolicObject = pycall(casadi.eq, C, x, y)
+==(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.eq, C, x, y)
+==(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.eq, C, x, y)
+==(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.eq, C, x, y)
 
 ## Linear algebra
-×(x::C, y::C)  = casadi.cross(x, y)
+×(x::C, y::Real) where C <: CasadiSymbolicObject = pycall(casadi.cross, C, x, y)

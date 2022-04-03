@@ -12,11 +12,11 @@ V = Vector{<:Real}
 -(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.minus, C, x, y)
 
 /(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.rdivide, C, x, y)
-/(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.rdivide, C, x, y)
+/(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.rdivide, C, x, y)
 /(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.rdivide, C, x, y)
 
 *(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.times, C, x, y)
-*(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.times, C, x, y)
+*(x::C, y::V) where C <: CasadiSymbolicObject = pycall(casadi.times, C, x, y)
 *(x::V, y::C) where C <: CasadiSymbolicObject = pycall(casadi.times, C, x, y)
 
 ^(x::C, y::C) where C <: CasadiSymbolicObject = pycall(casadi.power, C, x, y)

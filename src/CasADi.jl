@@ -1,3 +1,4 @@
+__precompile__	
 module CasADi
 
 using PyCall
@@ -13,7 +14,6 @@ export casadi, to_julia, substitute
 include("types.jl")
 include("constructors.jl")
 include("numbers.jl")
-include("mathops.jl")
 include("mathfuns.jl")
 include("generic.jl")
 include("utils.jl")
@@ -31,6 +31,4 @@ function __init__()
 end
 
 ## Add generic and new methods
-include("importexport.jl")
-
 end # module

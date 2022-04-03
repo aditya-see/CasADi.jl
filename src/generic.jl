@@ -1,14 +1,7 @@
 ## Indexing
-Base.getindex(
-  x::CasadiSymbolicObject,
-  j::Union{Int, UnitRange{Int}, Colon}
-) = get(x.__pyobject__, ( 1:length(x) )[j] .- 1)
+Base.getindex(x::CasadiSymbolicObject,j) = x.__pyobject__.__getitem__(j.-1)
 
-Base.getindex(
-  x::CasadiSymbolicObject,
-  j1::Union{Int, UnitRange{Int}, Colon},
-  j2::Union{Int, UnitRange{Int}, Colon}
-) = get(x.__pyobject__, LinearIndices( size(x) )[j1,j2] .- 1)
+Base.getindex(x::CasadiSymbolicObject,j1, j2) = x.__pyobject__.__getitem__((j1.-1, j2.-1))
 
 Base.setindex!(
   x::CasadiSymbolicObject,

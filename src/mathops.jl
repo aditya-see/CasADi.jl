@@ -1,4 +1,4 @@
-V = Vector{<:Real}
+V = Union{Vector{<:Real}, Matrix{<:Real}}
 ## Unary operations
 -(x::C) where C <: CasadiSymbolicObject = pycall(casadi.minus, C, 0, x)
 

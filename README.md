@@ -5,6 +5,7 @@
 | [![Build Status](https://travis-ci.com/ichatzinikolaidis/CasADi.jl.svg?token=FzSdC6SrVJguwZEzpBbQ&branch=main)](https://travis-ci.com/ichatzinikolaidis/CasADi.jl) | [![codecov](https://codecov.io/gh/ichatzinikolaidis/CasADi.jl/branch/main/graph/badge.svg?token=vdYN5Ok2BB)](https://codecov.io/gh/ichatzinikolaidis/CasADi.jl) |
 
 ## Introduction
+This is a fork of https://github.com/ichatzinikolaidis/CasADi.jl. It provides access to some additional functions from CasADi Python API.
 
 This package is an interface to CasADi, a powerful symbolic framework for automatic differentiation and optimal control.
 More information are available on the [official website](https://web.casadi.org).
@@ -22,8 +23,10 @@ This is **not** a registered package and there is no plan to register it soon.
 You can easily install it by activating the package manager `]` and running
 
 ```julia
-add git@github.com:ichatzinikolaidis/CasADi.jl.git
+add https://github.com/aditya-see/CasADi.jl
 ```
+
+
 
 ## Example: Create NLP solver
 
@@ -71,4 +74,16 @@ opti.solver("ipopt");
 sol = opti.solve();
 
 println( "Optimal solution: x = ", sol.value(x), ", y = ", sol.value(y) )
+```
+## Warning
+Be very careful while using broadcasting.
+```
+using CasADi
+
+x = SX("x", 4)
+v = collect(1:4)
+y = x + v # Works correctly and gives a vector
+y = x .+ v # Does not work correctly. Gives a weird matrix 
+y = x + 1 # Adds 1 to all elements
+y = x .+ 1 # Adds 1 to all elements.
 ```
